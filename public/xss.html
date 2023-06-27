@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>XSS検証用ページ</title>
+    <script src="./purify.js"></script>
   </head>
   <body>
     <h1>XSS検証用ページ</h1>
@@ -17,7 +18,11 @@
         // 以下どちらでも結果は同じ
         // const textNode = document.createTextNode(message);
         // document.querySelector("#result").appendChild(textNode);
-        document.querySelector("#result").textContent = message;
+        // document.querySelector("#result").textContent = message;
+
+        // DOMPurifyを使った例
+        const sanitizeMessage = DOMPurify.sanitize(message);
+        document.querySelector("#result").innerHTML = sanitizeMessage;
       }
 
       const urlStr = url.searchParams.get("url");
