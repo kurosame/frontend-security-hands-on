@@ -5,7 +5,29 @@
   </head>
   <body>
     <script nonce="<%= nonce %>">
-      alert("Hello, CPS!");
+      if (window.trustedTypes && trustedTypes.createPolicy) {
+        // ポリシー関数を定義する
+        const policy = trustedTypes.createPolicy("script-url", {
+          // <script>要素のsrcに設定するURLをチェック
+          createScriptURL: (src) => {
+            // strのURL文字列からOriginを取得するためにURLオブジェクトにする
+            const url = new URL(src, location.origin);
+            if (url.origin !== location.origin) {
+              // クロスオリジンの場合エラーにする
+              throw new Error("クロスオリジンは許可されていません。");
+            }
+            // 同一オリジンの場合のみURLを返す
+            return url;
+          },
+        });
+      }
+      // alert("Hello, CPS!");
+
+      const script = document.createElement("script");
+      // script.src = "./csp-test.js";
+      // 作成したポリシー関数によって検査されてTrustedScriptURLへ変換された値は代入可能になる
+      script.src = policy.createScriptURL("./csp-test.js");
+      document.body.appendChild(script);
     </script>
   </body>
 </html>
