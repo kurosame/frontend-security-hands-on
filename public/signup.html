@@ -16,6 +16,7 @@
             name="username"
             class="signup-input"
             required
+            autocomplete="email"
           />
         </div>
         <div>
@@ -28,7 +29,12 @@
             required
             pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
             title="パスワードには8文字以上の英数字を入力してください"
+            autocomplete="new-password"
           />
+        </div>
+        <div class="signup-item">
+          <input type="checkbox" id="display-password" />
+          <label for="display-password">パスワードを表示する</label>
         </div>
         <p><small>パスワードには8文字以上の英数字を入力してください</small></p>
         <button id="submit" type="submit">アカウント作成</button>
@@ -46,6 +52,17 @@
           );
         } else {
           password.setCustomValidity("");
+        }
+      });
+
+      const checkbox = document.querySelector("#display-password");
+      checkbox.addEventListener("change", () => {
+        if (checkbox.checked === true) {
+          // チェックボックスがONの場合、typeをtextへ変更
+          password.type = "text";
+        } else {
+          // チェックボックスがOFFの場合、typeをpasswordへ戻す
+          password.type = "password";
         }
       });
     </script>
